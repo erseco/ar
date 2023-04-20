@@ -92,8 +92,8 @@
         }
 
         #downloadBtn {
-            display: block;
-            width: 100%;
+/*            display: block;*/
+            width: 20%;
             text-align: center;
             font-size: 16px;
         }
@@ -108,7 +108,7 @@
     <div id="qrcode"></div>
     <p id="urlResult"></p>
     <!-- <button id="downloadBtn" style="display: none;">Descargar código QR</button> -->
-    <a id="downloadBtn" class="button" style="display: none;">Descargar código QR</a>
+    <a id="downloadBtn" class="button" style="display: none;">Descargar</a>
     <script>
         function generateQRCode() {
             const inputText = document.getElementById("inputText").value;
@@ -131,7 +131,7 @@
                 document.getElementById("urlResult").innerHTML = `URL extraída: <a href="${url[0]}">${url[0]}</a>`;
 
                 const downloadBtn = document.getElementById("downloadBtn");
-                downloadBtn.style.display = "block";
+                downloadBtn.style.display = "";
                 downloadBtn.onclick = () => {
                     const canvas = document.getElementsByTagName("canvas")[0];
                     const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
