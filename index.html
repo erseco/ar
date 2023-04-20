@@ -110,6 +110,13 @@
     <!-- <button id="downloadBtn" style="display: none;">Descargar código QR</button> -->
     <a id="downloadBtn" class="button" style="display: none;">Descargar</a>
     <script>
+        document.getElementById("inputText").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                generateQRCode();
+            }
+        });
+
         function generateQRCode() {
             const inputText = document.getElementById("inputText").value;
             // const regex = /(https?:\/\/[^\s]+)/g;
@@ -143,6 +150,11 @@
             }
         }
     </script>
-    <footer class="footer"><div class="text-center"><small class="copyright">Designed with&nbsp;❤️&nbsp;from a remote island</small><br><small class="copyright">2023 © Ernesto Serrano</small></div></footer>
+    <footer class="footer">
+        <div class="text-center">
+        <small class="copyright">Designed with&nbsp;❤️&nbsp;from a remote island  <a href="https://github.com/erseco/qr">(source code)</a>
+    </small><br>
+    <small class="copyright">2023 © Ernesto Serrano
+    </small></div></footer>
 </body>
 </html>
