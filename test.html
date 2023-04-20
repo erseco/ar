@@ -39,7 +39,7 @@
                     correctLevel: QRCode.CorrectLevel.H,
                 });
 
-                document.getElementById("urlResult").innerText = `URL extraída: ${url[0]}`;
+                document.getElementById("urlResult").innerText = `URL extraída: <a href="${url[0]}">${url[0]}</a>`;
 
                 const downloadBtn = document.getElementById("downloadBtn");
                 downloadBtn.style.display = "block";
