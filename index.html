@@ -1,53 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extraer URL y generar código QR</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+/*            display: flex;*/
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+	     a.button {
+	            display: inline-block;
+	            padding: 10px 20px;
+	            background-color: #4CAF50;
+	            border: none;
+	            border-radius: 5px;
+	            color: white;
+	            font-size: 16px;
+	            cursor: pointer;
+	            text-decoration: none;
+	            transition: background-color 0.3s;
+	        }
+
+	        a.button:hover {
+	            background-color: #45a049;
+	        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #qrcode {
+            width: 200px;
+            height: 200px;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #urlResult {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        #downloadBtn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-	<!-- src="https://h5p.org/h5p/embed/1377950"  -->
+    <h1>Extraer URL y generar código QR</h1>
+    <br />
+    <input type="text" id="inputText" placeholder="Introduce el texto con la URL" style="width: 100%;" />
+    <br />
+    <button onclick="generateQRCode()">Generar QR Code</button>
+    <div id="qrcode"></div>
+    <p id="urlResult"></p>
+    <!-- <button id="downloadBtn" style="display: none;">Descargar código QR</button> -->
+    <a id="downloadBtn" class="button" style="display: none;">Descargar código QR</a>
+    <script>
+        function generateQRCode() {
+            const inputText = document.getElementById("inputText").value;
+            // const regex = /(https?:\/\/[^\s]+)/g;
+            const regex = /(https?:\/\/[^\s"']+)/g;
+            const url = inputText.match(regex);
 
-<iframe 
-	id="miIframe" 
-	width="1090" 
-	height="702" 
-	frameborder="0" 
-	allowfullscreen="allowfullscreen" 
-	allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" 
-	title="AR Scavenger">
-		
-</iframe><script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script>
+            if (url && url.length > 0) {
+                const qrCodeElement = document.getElementById("qrcode");
+                qrCodeElement.innerHTML = "";
+                const qrcode = new QRCode(qrCodeElement, {
+                    text: url[0],
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H,
+                });
+
+                document.getElementById("urlResult").innerHTML = `URL extraída: <a href="${url[0]}">${url[0]}</a>`;
+
+                const downloadBtn = document.getElementById("downloadBtn");
+                downloadBtn.style.display = "block";
+                downloadBtn.onclick = () => {
+                    const canvas = document.getElementsByTagName("canvas")[0];
+                    const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                    downloadBtn.href = image;
+                    downloadBtn.download = "codigo_qr.png";
+                };
+            } else {
+                alert("No se ha encontrado ninguna URL en el texto introducido.");
+            }
+        }
+    </script>
 </body>
-	<script type="text/javascript">
-		
-		function obtenerParametrosURL() {
-		    var parametros = {};
-		    var partes = window.location.search.substring(1).split('&');
-
-		    for (var i = 0; i < partes.length; i++) {
-		        var parametro = partes[i].split('=');
-		        parametros[parametro[0]] = decodeURIComponent(parametro[1]);
-		    }
-
-		    return parametros;
-		}
-
-		function cargarIframe() {
-		    var parametros = obtenerParametrosURL();
-		    var id = parametros['id'];
-
-		    if (id) {
-		        var iframe = document.getElementById('miIframe');
-		        var urlBase = "https://h5p.org/h5p/embed/";
-		        var urlCompleta = urlBase + id;
-		        iframe.src = urlCompleta;
-		    } else {
-		        console.error("No se proporcionó un ID válido en la URL.");
-		    }
-		}
-
-		cargarIframe();
-
-	</script>
 </html>
